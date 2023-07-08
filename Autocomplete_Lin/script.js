@@ -20,7 +20,7 @@ function showSuggestions(results, inputVal) {
 	// TODO
 }
 
-function useSuggestion(e) {
+function useSuggestion(e) { //Put this into 
 	// TODO
 }
 
