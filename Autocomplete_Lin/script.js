@@ -40,16 +40,33 @@ function search(str) { //example is app -> 'Apple', 'Pineapple', 'Custard apple'
 
 function searchHandler(e) { //function for keystroke event listenner
 	// TODO
+	let searchBarText = e.target.value;
+	let foundFruit = search(searchBarText);
+	return showSuggestions(foundFruit, searchBarText)
 }
 
 function showSuggestions(results, inputVal) {
 //link with search() -> results (param1)
 //param2 = input.value; 
-	// TODO
+	console.log(results, inputVal);
+	if (inputVal){
+		for (let suggested of results){
+			let newSuggestionLi = document.createElement('li');
+			newSuggestionLi.classList.add('suggestion');
+			newSuggestionLi.innerText = suggested
+			suggestions.append(newSuggestionLi);
+		}
+	}
+	else {
+		console.log(results, inputVal)
+	}
 }
 
 function useSuggestion(e) { //function for suggestion click event listener
 	// TODO
+	let clickedSuggestion = e.target; 
+	if (clickedSuggestion.tagName === 'LI' && clickedSuggestion.className === 'suggestion')
+	document.querySelector(`#form`).value = clickedSuggestion.innerText;
 }
 
 input.addEventListener('keyup', searchHandler);
