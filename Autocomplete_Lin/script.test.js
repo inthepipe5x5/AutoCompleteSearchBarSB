@@ -6,9 +6,20 @@ describe(`step 4 -> search bar has placeholder`, function (){
 }); 
 
 //step 5 --> check if event listener added for key strokes
-describe(`check if event listener is attached to form element`, function (){
-    expect(typeof document.getElementById('fruit').addEventListener.hasEventListener('keyup')).toEqual('true')
-}); 
+// describe(`check if event listener is attached to form element`, function (){
+//     const fruitSearchBar = document.getElementById(`#fruit`)
+//     fruitSearchBar.value = 'ap'
+//     const observer = new MutationObserver( mutationList => {
+//         for (const mutation of mutationList) {
+//             if (mutation.type === "childList") {
+//               console.log("A child node has been added or removed.");
+//             } else if (mutation.type === "attributes") {
+//               console.log(`The ${mutation.attributeName} attribute was modified.`);
+//               expect(mutation.attributeName).toEqual('value');
+//               expect(mutation.)
+//       });
+//       observer.observe(document.body, {attributes: true, childList: true, subtree: true});
+// }); 
 
 //step 6 --> test search()
 describe('step6 search() tests', function (){
