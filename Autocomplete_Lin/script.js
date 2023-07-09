@@ -11,16 +11,17 @@ function search(str) {
 	return results;
 }
 
-function searchHandler(e) {
+function searchHandler(e) { //function for keystroke event listenner
 	// TODO
 }
 
 function showSuggestions(results, inputVal) {
-
+//link with search() -> results (param1)
+//param2 = input.value; 
 	// TODO
 }
 
-function useSuggestion(e) { //Put this into 
+function useSuggestion(e) { //function for suggestion click event listener
 	// TODO
 }
 
