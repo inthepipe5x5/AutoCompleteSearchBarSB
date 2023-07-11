@@ -29,12 +29,49 @@ const fruit = ['Apple', 'Apricot', 'Avocado 🥑', 'Banana', 'Bilberry', 'Blackb
 function search(str) { //example is app -> 'Apple', 'Pineapple', 'Custard apple'
 	let lowerCaseStr = str.toLowerCase();
 	let strArr = lowerCaseStr.split('')
-	let results = fruit.reduce((accum, currentFruit) => {
-		let matchedLetters = currentFruit.reduce((accum, currentChar)=>{
-			return strArr.includes(currentChar) ? accum += currentChar: accum;
-		},'')
-		return matchedLetters === lowerCaseStr ? accum.push(currentFruit): accum; //return accum array of matched fruits
-		},[])
+	let results = []; 
+	
+	if (lowerCaseStr.length < 2) return results = fruit.filter(individualFruit => individualFruit.includes(lowerCaseStr));
+
+	if (lowerCaseStr.length === 2){
+		fruit.forEach(individualFruit => individualFruit.split('').reduce((accum, next) => {
+			let combinator = accum + next; 
+			if (lowerCaseStr === combinator) {
+				results.push(individualFruit);
+				return;
+			} else {
+				return next} 
+		}))
+	}
+
+	if (lowerCaseStr.length > 2){ //eg. 'apr' --> 3 character input 
+		fruit.forEach(individualFruit => {
+			for (let individualFruitWord of fruit){
+				if (individualFruitWord.includes(strArr[0])){
+					individualFruitWord.split('').reduce((accum, next)=>{
+						let combinator = accum + next; //default length is 2 [a0 p1 r2 i3]
+						let interatingSearchStr = strArr.slice(0, combinator.length).join(''); //if combinator matches, this grows longer
+						if (combinator !== interatingSearchStr){
+							return combinator //better to return next? 
+						} 
+						if (combinator === interatingSearchStr){
+							if (combinator.length === strArr.length){ //check if interatingSearchStr is done interating
+								//need a checker here before the push to results
+								results.push(individualFruit);
+								return; //break out of reduce function
+							}
+							else { //if not done iterating, return accum and continue the reduce function
+								return accum; //return accum as 
+							}
+						}
+						
+					})
+				}
+			}
+
+		})
+	}
+
 	return results;
 }
 
