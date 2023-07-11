@@ -29,12 +29,36 @@ const fruit = ['Apple', 'Apricot', 'Avocado 🥑', 'Banana', 'Bilberry', 'Blackb
 function search(str) { //example is app -> 'Apple', 'Pineapple', 'Custard apple'
 	let lowerCaseStr = str.toLowerCase();
 	let strArr = lowerCaseStr.split('')
-	let results = fruit.reduce((accum, currentFruit) => {
-		let matchedLetters = currentFruit.reduce((accum, currentChar)=>{
-			return strArr.includes(currentChar) ? accum += currentChar: accum;
-		},'')
-		return matchedLetters === lowerCaseStr ? accum.push(currentFruit): accum; //return accum array of matched fruits
-		},[])
+	let results = []; 
+	
+	if (lowerCaseStr.length < 2) return results = fruit.filter(items => items.includes(lowerCaseStr));
+
+	if (lowerCaseStr.length === 2){
+		fruit.forEach(individualFruit => individualFruit.split('').reduce((accum, next) => {
+			let combinator = accum + next; 
+			if (lowerCaseStr === combinator) results.push(fruit);
+			else {return next}
+			//how does this deal with search cases where the combinator matches the lowerCaseStr later on in the word? 
+		}))
+	}
+
+	if (lowerCaseStr.length > 2){
+		for (let individualFruit of fruit){
+			individualFruit.split('').reduce((accum, next)=>{
+				let combinator = accum + next; 
+				if (combinator !== strArr.slice(0, combinator.length).join('')){
+					return combinator //better to return next? 
+				};
+				if (combinator.length === strArr.length){
+					//need a checker here before the push to results
+					results.push(individualFruit);
+					return accum; 
+				}
+			})
+
+		}
+	}
+
 	return results;
 }
 
