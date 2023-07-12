@@ -24,19 +24,20 @@ describe(`step 4 -> search bar has placeholder`, function (){
 //step 6 --> test search()
 describe('step6 search() tests', function (){
     it (`checking basic search`, function (){
-        expect(search('app').toEqual(['Apple', 'Pineapple', 'Custard Apple']))
-        expect(search('apr').toEqual('Apricot')) //can differentiate between apple and apricot
-        expect(search('yuz').toEqual('Yuzu'))
+        expect(search('app')).toEqual(['Apple', 'Pineapple', 'Custard Apple'])
+        expect(search('l')).toEqual(['Apple', 'Bilberry', 'Blackberry', 'Blackcurrant', 'Blueberry', 'Custard apple', 'Elderberry', 'Huckleberry', 'Jambul', 'Melon', 'Cantaloupe', 'Watermelon', 'Miracle fruit', 'Mulberry', 'Olive', 'Clementine', 'Plantain', 'Plum', 'Pineapple', 'Pomelo', 'Salmonberry', 'Salak', 'Tamarillo'])
+        expect(search('apr')).toEqual(['Apricot']) //can differentiate between apple and apricot
+        expect(search('yuz')).toEqual(['Yuzu'])
     }), 
     it (`SHOULD NOT BE CASE SENSITIVE`, function(){
-        expect(search('A').toEqual(['Apple', 'Apricot', 'Avocado 🥑']))//checking uppercase sensitivity ; 
+        expect(search('Y')).toEqual(['Bilberry', 'Blackberry', 'Blueberry', 'Boysenberry', 'Cherry', 'Cranberry', 'Elderberry', 'Gooseberry', 'Honeyberry', 'Huckleberry', 'Juniper berry', 'Lychee', 'Marionberry', 'Honeydew', 'Mulberry', 'Papaya', 'Raspberry', 'Salmonberry', 'Strawberry'])//checking uppercase sensitivity ; 
     }), 
     // it (`select multiple fruits`, function (){ //ap test doesn't work yet
     //     expect(search('ap').toEqual(['Apple','Apricot', 'Grape', 'Grapefruit','Papaya', 'Pineapple'])) //multiple fruits should be selected
     // }),
     it (`EDGE CASES`, function(){
-        expect(search('🥑').toEqual('Avocado 🥑')) //EDGE case: searching by emoji
-        expect(search().toBeFalsy()) //EDGE CASE: no input
+        expect(search('🥑')).toEqual(['Avocado 🥑']) //EDGE case: searching by emoji
+        expect(search()).toBeFalsy() //EDGE CASE: no input
     })
 })
 
@@ -48,7 +49,7 @@ describe('step 7 - list test', function(){
 
     it (`search results test : ap -> apple`, function(){
         if (document.querySelector(`#fruit`).value === 'ap'){
-            return expect(Array.from(suggestedResultsList.value())).toEqual(['Apple','Apricot', 'Grape', 'Grapefruit','Papaya', 'Pineapple']) //multiple fruits should be selected
+            return expect(Array.from(suggestedResultsList.value())).toEqual(['Apple', 'Apricot', 'Custard apple', 'Grape', 'Grapefruit', 'Papaya', 'Pineapple']) //multiple fruits should be selected
         }
     }); 
 
