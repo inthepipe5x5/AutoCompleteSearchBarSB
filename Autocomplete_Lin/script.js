@@ -6,55 +6,94 @@ const fruit = ['Apple', 'Apricot', 'Avocado 🥑', 'Banana', 'Bilberry', 'Blackb
 function search(str) { //example is app -> 'Apple', 'Pineapple', 'Custard apple'
 	// if (!str) return; 
 	let results = []; 
-	if (fruit.includes(str)) results.push(fruit[fruit.indexOf(str)]);
+	if (fruit.includes(str) && str === fruit.find(foundFruit => { return (foundFruit === str || foundFruit === str.toLowerCase())})){
+		results.push(fruit[fruit.indexOf(str)]);
+	} 
 	
 	let lowerCaseStr = str.toLowerCase();
 	let strArr = lowerCaseStr.split('')
 	
 	if (lowerCaseStr.length < 2) return results = fruit.filter(individualFruit => individualFruit.includes(lowerCaseStr));
 
-	if (lowerCaseStr.length === 2){
-		fruit.forEach(individualFruit => individualFruit.toLowerCase().split('').reduce((accum, next) => {
-			let combinator = accum + next; 
-			if (lowerCaseStr === combinator) {
-				results.push(individualFruit);
-				return;
-			} else {
-				return next} 
-		}))
-	}
+	// if (lowerCaseStr.length === 2){
+	// 	fruit.forEach(individualFruit => individualFruit.toLowerCase().split('').reduce((accum, next) => {
+	// 		let combinator = accum + next; 
+	// 		if (lowerCaseStr === combinator) {
+	// 			results.push(individualFruit);
+	// 			return next; 
+	// 		} else {
+	// 			return next} 
+	// 	}))
+	// }
 
-	if (lowerCaseStr.length > 2){ //eg. 'apr' --> 3 character input 
-		fruit.forEach(individualFruit => {
-			for (let individualFruitWord of fruit){
-				let individualFruitWordLowerCase = individualFruitWord.toLowerCase();
-				if (individualFruitWordLowerCase.includes(strArr[0])){
-					individualFruitWordLowerCase.split('').reduce((accum, next)=>{
-						let combinator = accum + next; //default length is 2 [a0 p1 r2 i3]
-						let interatingSearchStr = strArr.slice(0, combinator.length).join(''); //if combinator matches, this grows longer
-						if (combinator !== interatingSearchStr){
-							return next; //better to return next? 
-						} 
-						if (combinator === interatingSearchStr){
-							if (combinator.length === strArr.length){ //check if interatingSearchStr is done interating
-								results.push(individualFruit);
-								results = Array.from(new Set (results)) //make sure no duplicate fruits added
-								return next; 
-							}
-							else { //if not done iterating, return accum and continue the reduce function
-								return accum; //return accum as accum
-							}
-						}
+	// if (lowerCaseStr.length > 2){ //eg. 'apr' --> 3 character input 
+	// 	fruit.forEach(individualFruit => {
+	// 		for (let individualFruitWord of fruit){
+	// 			let individualFruitWordLowerCase = individualFruitWord.toLowerCase();
+	// 			if (individualFruitWordLowerCase.includes(strArr[0])){
+	// 				individualFruitWordLowerCase.split('').reduce((accum, next)=>{
+	// 					let combinator = accum + next; //default length is 2 [a0 p1 r2 i3]
+	// 					let interatingSearchStr = strArr.slice(0, combinator.length).join(''); //if combinator matches, this grows longer
+	// 					if (combinator !== interatingSearchStr){
+	// 						return next; //better to return next? 
+	// 					} 
+	// 					if (combinator === interatingSearchStr){
+	// 						if (combinator.length === strArr.length){ //check if interatingSearchStr is done interating
+	// 							results.push(individualFruit);
+	// 							results = Array.from(new Set (results)) //make sure no duplicate fruits added
+	// 							return next; 
+	// 						}
+	// 						else { //if not done iterating, return accum and continue the reduce function
+	// 							return accum; //return accum as accum
+	// 						}
+	// 					}
 						
-					})
-				}
+	// 				})
+	// 			}
+	// 		}
+
+	// 	})
+	// }
+	
+	// if (lowerCaseStr.length >= 2){
+	// 	results = fruit.filter(individualFruit => {
+	// 		let fruitArr = individualFruit.toLowerCase().split('');
+	// 		let foundFruitIndex = fruitArr.indexOf(lowerCaseStr[0]);
+	// 		if (foundFruitIndex >= 0 ){
+	// 		let strLength = lowerCaseStr.length
+	// 		let fruitSliced = fruitArr.slice(foundFruitIndex, strLength).join('')
+			
+	// 		console.log(individualFruit,fruitSliced, foundFruitIndex)
+	// 		return fruitSliced === lowerCaseStr}
+	// 	})
+	// return results; //prevent duplicates
+	// } //only returns one or two results -> ignores the rest
+
+	if (lowerCaseStr.length >= 2){
+		const firstFilter = fruit.filter(individualFruit => {
+			let fruitArr = individualFruit.toLowerCase().split('');
+			return fruitArr.includes(lowerCaseStr[0])})
+		
+		results = firstFilter.filter(splitFruit =>{
+				let strLength = lowerCaseStr.length
+				let foundFruitIndex = splitFruit.indexOf(lowerCaseStr[0]);
+				let fruitSliced = splitFruit.slice(foundFruitIndex, strLength).join('')
+					
+				console.log(individualFruit,fruitSliced, foundFruitIndex)
+				return fruitSliced === lowerCaseStr
+				})
 			}
+			return results; //prevent duplicates
+			
+		}
+			
+			
+// 			)
+// 			)
+// 	}
+// }
 
-		})
-	}
-
-	return results;
-}
+console.log(search('gr'))
 
 function searchHandler(e) { //function for keystroke event listenner
 	// TODO
@@ -67,7 +106,7 @@ function showSuggestions(results, inputVal) {
 //link with search() -> results (param1)
 //ad inputVal to .value prev input? 
 //param2 = input.value; 
-	console.log(results, inputVal);
+	// console.log(results, inputVal);
 	let suggestionsLiList = document.querySelectorAll('li.suggestion')
 	for (let suggested of suggestionsLiList){ //clear suggestion li 
 		suggestions.remove(suggested)
