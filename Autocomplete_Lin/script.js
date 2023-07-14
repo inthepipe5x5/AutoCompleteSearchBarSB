@@ -13,7 +13,7 @@ const search = str => {
 function searchHandler(e) { //function for keystroke event listenner
 	// TODO\
 	// console.log(`this is the key pressed ${KeyboardEvent.key}`)
-	console.log(input.value)
+	if (document.querySelector('input').value.length === 0) {removeSuggestedResultsLi()}
 	removeSuggestedResultsLi();
 	let searchBarText = e.target.value;
 	let foundFruit = search(searchBarText);
@@ -33,15 +33,44 @@ function showSuggestions(results, inputVal) {
 			newSuggestionLi.classList.add('suggestion');
 			newSuggestionLi.innerText = suggested
 			suggestions.append(newSuggestionLi);
+			//inputVal needs to be highlighted in the suggestions
+			makeResultsBolderWhenHoveredOver(suggested, inputVal); //I think i should move this
 		}
+		//create smart highlighter function that takes inputVal and bolds it
+		//pets.filter(animal => animal.includes('at')).map(atAnimal => atAnimal.indexOf('at')) --> gives arr with indexs of where input str is located
+		
+}
+
+const makeResultsBolderWhenHoveredOver = (element, inputVal) => {
+
+}
+
+
+const hoverBackgroundChange= e => {
+	let textToBeBolder = e.target.innerText;
+	if (e.target.tagName === 'LI' && e.target.className === 'suggestion'){
+		e.target.classList.add('mousefocus');
+	}
+}
+
+const removeStylingWhenNotFocused = e => {
+	if (e.target.tagName === 'LI' && e.target.className === 'suggestion'){
+		for (let suggestionNode of document.querySelectorAll('li.suggestion')){
+			suggestionNode.style.backgroundColor = 'white'
+		}
+	}
 }
 
 function useSuggestion(e) { //function for suggestion click event listener
 	// TODO
 	let clickedSuggestion = e.target; 
 	if (clickedSuggestion.tagName === 'LI' && clickedSuggestion.className === 'suggestion')
-	document.querySelector(`#form`).value = clickedSuggestion.innerText;
+	document.querySelector(`#fruit`).value = clickedSuggestion.innerText;
 }
 
 input.addEventListener('keyup', searchHandler);
 suggestions.addEventListener('click', useSuggestion);
+
+//do the following in CSS instead
+// suggestions.addEventListener('mouseover', hoverBackgroundChange);
+// suggestions.addEventListener('mouseleave', removeStylingWhenNotFocused);
