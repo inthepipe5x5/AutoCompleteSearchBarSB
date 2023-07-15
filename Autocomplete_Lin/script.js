@@ -3,6 +3,56 @@ const suggestions = document.querySelector('.suggestions ul');
 
 const fruit = ['Apple', 'Apricot', 'Avocado 🥑', 'Banana', 'Bilberry', 'Blackberry', 'Blackcurrant', 'Blueberry', 'Boysenberry', 'Currant', 'Cherry', 'Coconut', 'Cranberry', 'Cucumber', 'Custard apple', 'Damson', 'Date', 'Dragonfruit', 'Durian', 'Elderberry', 'Feijoa', 'Fig', 'Gooseberry', 'Grape', 'Raisin', 'Grapefruit', 'Guava', 'Honeyberry', 'Huckleberry', 'Jabuticaba', 'Jackfruit', 'Jambul', 'Juniper berry', 'Kiwifruit', 'Kumquat', 'Lemon', 'Lime', 'Loquat', 'Longan', 'Lychee', 'Mango', 'Mangosteen', 'Marionberry', 'Melon', 'Cantaloupe', 'Honeydew', 'Watermelon', 'Miracle fruit', 'Mulberry', 'Nectarine', 'Nance', 'Olive', 'Orange', 'Clementine', 'Mandarine', 'Tangerine', 'Papaya', 'Passionfruit', 'Peach', 'Pear', 'Persimmon', 'Plantain', 'Plum', 'Pineapple', 'Pomegranate', 'Pomelo', 'Quince', 'Raspberry', 'Salmonberry', 'Rambutan', 'Redcurrant', 'Salak', 'Satsuma', 'Soursop', 'Star fruit', 'Strawberry', 'Tamarillo', 'Tamarind', 'Yuzu'];
 
+class Fruit {
+	constructor (fruitName){
+	this[fruitName];
+	this.lowerCaseName = this.name.toLowerCase();
+	this.lowerCaseNameArr = lowerCaseName.split('');
+	this.idx = fruit.indexOf(this.name);
+	this.fruitStrLength = this.name.length;
+	this.specialCharacters = 
+		{
+		uppercases: this.name.split('').some(char => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.includes(char)), //true or false 
+		spaces: this.name.split('').some(char => char === ' '), //true or false
+		numberOfWords: this.name.split(" ").length //number
+		}
+	}
+	
+	doesThisContainStrToBeSearched (strToBeSearched){
+		return this.lowerCaseNameArr.some(char => strToBeSearched.toLowerCase().includes(char.toLowerCase())) //returns true or false
+	}
+	getMatchingStr (strToBeMatched) {
+		if (doesThisContainStrToBeSearched (strToBeMatched)){
+			this.lowerCaseNameArr.forEach((lowerCaseChar,charIdx, array) =>{
+				if (lowerCaseChar === strToBeMatched [0]){
+				let strLength = strToBeMatched.length;
+				let matchedStrSlice = array.slice(charIdx, (charIdx + strLength).join(''));
+				return (matchedStrSlice === strToBeMatched.toLowerCase()? matchedStrSlice : matchedStrSlice = undefined);
+				}
+			return matchedStrSlice; 
+			});
+		} else {return 'no matches'}
+	}
+	getMatchingObj (searchStr, matchedStrSlice){ 
+		this.lowerCaseNameArr.forEach((matchedChar,matchedIdx) => {
+        if (lowerCaseStr.includes(matchedChar)
+          && lowerCaseStr === this.lowerCaseName.slice(matchedIdx,(matchedIdx + searchStr.length))){
+			StartIdxMatchingStrFoundAt = matchedIdx;
+			endIdxMatchingStrFoundAt = matchedIdx + searchStr.length;
+			idxArrOfMatchingStrFromResultsArr.push({
+				name: this.name, 
+				matchedStrSlice, 
+				StartIdxMatchingStrFoundAt: matchedStrSlice, 
+				endIdxMatchingStrFoundAt: matchedIdx + searchStr.length, 
+				searchStr
+			})
+			
+		}
+	})		
+	return idxArrOfMatchingStrFromResultsArr
+	}
+}
+	
 const search = str => {
 	let lowerCaseStrToBeMatched = str.toLowerCase();
 	const results = fruit.filter(individualFruit => individualFruit.toLowerCase().includes(lowerCaseStrToBeMatched))
@@ -10,14 +60,14 @@ const search = str => {
 }
 
 
-function searchHandler(e) { //function for keystroke event listenner
-	// TODO\
-	// console.log(`this is the key pressed ${KeyboardEvent.key}`)
-	if (document.querySelector('input').value.length === 0) {removeSuggestedResultsLi()}
+function searchHandler(e) { 
 	removeSuggestedResultsLi();
-	let searchBarText = e.target.value;
-	let foundFruit = search(searchBarText);
-	return showSuggestions(foundFruit, searchBarText)
+	if (document.querySelector('input#fruit.searchbar').value !== '') {
+		removeSuggestedResultsLi();
+		let searchBarText = e.target.value;
+		let foundFruit = search(searchBarText);
+		return showSuggestions(foundFruit, searchBarText)
+	}
 }
 
 const removeSuggestedResultsLi = () => {
@@ -33,16 +83,8 @@ function showSuggestions(results, inputVal) {
 			newSuggestionLi.classList.add('suggestion');
 			newSuggestionLi.innerText = suggested
 			suggestions.append(newSuggestionLi);
-			//inputVal needs to be highlighted in the suggestions
-			makeResultsBolderWhenHoveredOver(suggested, inputVal); //I think i should move this
-		}
-		//create smart highlighter function that takes inputVal and bolds it
-		//pets.filter(animal => animal.includes('at')).map(atAnimal => atAnimal.indexOf('at')) --> gives arr with indexs of where input str is located
-		
-}
-
-const makeResultsBolderWhenHoveredOver = (element, inputVal) => {
-
+			//TODO: inputVal needs to be highlighted in the suggestions
+		}	
 }
 
 

@@ -134,3 +134,44 @@ console.log(searchArrWithStr(lFilteredArrExpectTwentyThreeLength, testStr2))
     return finalOutput;
   };
   
+
+  const wordSearchResultsBoldener = (searchStr, resultsArr) => {
+    //resultsArr is array of search results that match the searchStr
+    //resultsArr returned from the results in search () 
+    //searchStr => str that was entered into input 
+  
+  const idxArrOfMatchingStrFromResultsArr = [{searchStr,searchStrLength: searchStr.length}] //array of obj of found objects
+  let matchingStrSliceToBeBold = '';
+  let StartIdxMatchingStrFoundAt = -Infinity;
+  let endIdxMatchingStrFoundAt = +Infinity
+  let lowerCaseStr = searchStr.toLowerCase();
+
+  for (let matchedItem of resultsArr ) {
+      let lowerCaseMatchedItem = matchedItem.toLowerCase();
+      lowerCaseMatchedItem.toLowerCase().split("").forEach((matchedChar,matchedIdx) => {
+        if (lowerCaseStr.includes(matchedChar))
+          if (lowerCaseStr === matchedItem.slice(matchedIdx,(matchedIdx + searchStr.length)).join("").toLowerCase()){
+          StartIdxMatchingStrFoundAt = matchedIdx;
+          endIdxMatchingStrFoundAt = matchedIdx + searchStr.length;
+          idxArrOfMatchingStrFromResultsArr.push({
+            name: matchedItem, 
+            matchingStrSliceToBeBold, 
+            StartIdxMatchingStrFoundAt, 
+            endIdxMatchingStrFoundAt, 
+            lowerCaseStr
+          })};
+  })//end of forEach function
+      
+  }//end of wordSearchResultsBoldener function
+
+  function createAndPushSubclass(classStr, array, strClass) {
+    let newClassInstance = new strClass (classStr) 
+ 
+  
+      // Subclass methods
+    
+  
+    array.push(newClassInstance);
+  }
+
+  
