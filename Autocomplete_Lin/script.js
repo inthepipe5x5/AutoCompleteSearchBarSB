@@ -3,54 +3,29 @@ const suggestions = document.querySelector('.suggestions ul');
 
 const fruit = ['Apple', 'Apricot', 'Avocado 🥑', 'Banana', 'Bilberry', 'Blackberry', 'Blackcurrant', 'Blueberry', 'Boysenberry', 'Currant', 'Cherry', 'Coconut', 'Cranberry', 'Cucumber', 'Custard apple', 'Damson', 'Date', 'Dragonfruit', 'Durian', 'Elderberry', 'Feijoa', 'Fig', 'Gooseberry', 'Grape', 'Raisin', 'Grapefruit', 'Guava', 'Honeyberry', 'Huckleberry', 'Jabuticaba', 'Jackfruit', 'Jambul', 'Juniper berry', 'Kiwifruit', 'Kumquat', 'Lemon', 'Lime', 'Loquat', 'Longan', 'Lychee', 'Mango', 'Mangosteen', 'Marionberry', 'Melon', 'Cantaloupe', 'Honeydew', 'Watermelon', 'Miracle fruit', 'Mulberry', 'Nectarine', 'Nance', 'Olive', 'Orange', 'Clementine', 'Mandarine', 'Tangerine', 'Papaya', 'Passionfruit', 'Peach', 'Pear', 'Persimmon', 'Plantain', 'Plum', 'Pineapple', 'Pomegranate', 'Pomelo', 'Quince', 'Raspberry', 'Salmonberry', 'Rambutan', 'Redcurrant', 'Salak', 'Satsuma', 'Soursop', 'Star fruit', 'Strawberry', 'Tamarillo', 'Tamarind', 'Yuzu'];
 
-class Fruit {
-	constructor (fruitName){
-	this[fruitName];
-	this.lowerCaseName = this.name.toLowerCase();
-	this.lowerCaseNameArr = lowerCaseName.split('');
-	this.idx = fruit.indexOf(this.name);
-	this.fruitStrLength = this.name.length;
-	this.specialCharacters = 
-		{
-		uppercases: this.name.split('').some(char => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.includes(char)), //true or false 
-		spaces: this.name.split('').some(char => char === ' '), //true or false
-		numberOfWords: this.name.split(" ").length //number
-		}
-	}
+const doesThisContainStrToBeSearched = (fruitName, strToBeSearched) => fruitName.toLowerCase().split('').some(char => strToBeSearched.toLowerCase().includes(char.toLowerCase())) //returns true or false
 	
-	doesThisContainStrToBeSearched (strToBeSearched){
-		return this.lowerCaseNameArr.some(char => strToBeSearched.toLowerCase().includes(char.toLowerCase())) //returns true or false
-	}
-	getMatchingStr (strToBeMatched) {
-		if (doesThisContainStrToBeSearched (strToBeMatched)){
-			this.lowerCaseNameArr.forEach((lowerCaseChar,charIdx, array) =>{
+const getMatchingFruitObj = (fruitName, strToBeMatched) => {
+	const expandedResultsArr = [];
+		if (doesThisContainStrToBeSearched (fruitName, strToBeMatched)){
+			fruitName.toLowerCase().split('').forEach((lowerCaseChar,charIdx) =>{
 				if (lowerCaseChar === strToBeMatched [0]){
-				let strLength = strToBeMatched.length;
-				let matchedStrSlice = array.slice(charIdx, (charIdx + strLength).join(''));
-				return (matchedStrSlice === strToBeMatched.toLowerCase()? matchedStrSlice : matchedStrSlice = undefined);
+					let strLength = strToBeMatched.length;
+					let matchedStrSlice = fruitName.slice(charIdx, (charIdx + strLength)).toLowerCase();
+					if (matchedStrSlice === strToBeMatched.toLowerCase() ){
+						expandedResultsArr.push({
+							name: fruitName, 
+							matchedStrSlice, 
+							StartIdxMatchingStrFoundAt: charIdx, 
+							endIdxMatchingStrFoundAt: charIdx + strLength, 
+							strToBeMatched 
+						}) 
+					} 
 				}
-			return matchedStrSlice; 
-			});
-		} else {return 'no matches'}
-	}
-	getMatchingObj (searchStr, matchedStrSlice){ 
-		this.lowerCaseNameArr.forEach((matchedChar,matchedIdx) => {
-        if (lowerCaseStr.includes(matchedChar)
-          && lowerCaseStr === this.lowerCaseName.slice(matchedIdx,(matchedIdx + searchStr.length))){
-			StartIdxMatchingStrFoundAt = matchedIdx;
-			endIdxMatchingStrFoundAt = matchedIdx + searchStr.length;
-			idxArrOfMatchingStrFromResultsArr.push({
-				name: this.name, 
-				matchedStrSlice, 
-				StartIdxMatchingStrFoundAt: matchedStrSlice, 
-				endIdxMatchingStrFoundAt: matchedIdx + searchStr.length, 
-				searchStr
 			})
-			
+		return expandedResultsArr
 		}
-	})		
-	return idxArrOfMatchingStrFromResultsArr
-	}
+		else {return 'no matches'}
 }
 	
 const search = str => {
@@ -58,7 +33,6 @@ const search = str => {
 	const results = fruit.filter(individualFruit => individualFruit.toLowerCase().includes(lowerCaseStrToBeMatched))
 	return results;
 }
-
 
 function searchHandler(e) { 
 	removeSuggestedResultsLi();
@@ -77,16 +51,24 @@ const removeSuggestedResultsLi = () => {
 	}
 }
 
-function showSuggestions(results, inputVal) {		
+function showSuggestions(results, inputVal) {
+		let inputLength = inputVal.length;
 		for (let suggested of results){
-			let newSuggestionLi = document.createElement('li');
-			newSuggestionLi.classList.add('suggestion');
-			newSuggestionLi.innerText = suggested
-			suggestions.append(newSuggestionLi);
-			//TODO: inputVal needs to be highlighted in the suggestions
+			let foundIdx = suggested.toLowerCase().indexOf(inputVal.toLowerCase());
+			let boldTextSegment = "<b>" + suggested.slice(foundIdx, (foundIdx + inputLength)) + "</b>"
+
+			let fullText = ''
+			if (foundIdx === 0) fullText = boldTextSegment + suggested.slice(foundIdx + inputLength); //bold at beginning 
+			if (foundIdx !== 0 && foundIdx + inputLength < suggested.length) fullText = suggested.slice(0, foundIdx) + boldTextSegment + suggested.slice(foundIdx + inputLength) //bold in middle
+			if (foundIdx + inputLength >= suggested.length) fullText = suggested.slice(0, foundIdx) + boldTextSegment; //bold at end
+
+				let newSuggestionLi = document.createElement('li');
+				newSuggestionLi.classList.add('suggestion');
+				newSuggestionLi.innerHTML = fullText;
+			
+				suggestions.append(newSuggestionLi);
 		}	
 }
-
 
 const hoverBackgroundChange= e => {
 	let textToBeBolder = e.target.innerText;
