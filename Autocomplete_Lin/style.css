@@ -45,6 +45,7 @@ ul li {
 }
 ul li:hover {
   /* TODO */
+  background-color: red;
 }
 
 input {
