@@ -55,7 +55,7 @@ function showSuggestions(results, inputVal) {
 		let inputLength = inputVal.length;
 		for (let suggested of results){
 			let foundIdx = suggested.toLowerCase().indexOf(inputVal.toLowerCase());
-			let boldTextSegment = "<b>" + suggested.slice(foundIdx, (foundIdx + inputLength)) + "</b>"
+			let boldTextSegment = `<b fruit-name="${suggested}">` + suggested.slice(foundIdx, (foundIdx + inputLength)) + "</b>"
 
 			let fullText = ''
 			if (foundIdx === 0) fullText = boldTextSegment + suggested.slice(foundIdx + inputLength); //bold at beginning 
@@ -64,6 +64,7 @@ function showSuggestions(results, inputVal) {
 
 				let newSuggestionLi = document.createElement('li');
 				newSuggestionLi.classList.add('suggestion');
+				newSuggestionLi.setAttribute('fruit-name', suggested)
 				newSuggestionLi.innerHTML = fullText;
 			
 				suggestions.append(newSuggestionLi);
@@ -71,7 +72,6 @@ function showSuggestions(results, inputVal) {
 }
 
 const hoverBackgroundChange= e => {
-	let textToBeBolder = e.target.innerText;
 	if (e.target.tagName === 'LI' && e.target.className === 'suggestion'){
 		e.target.classList.add('mousefocus');
 	}
@@ -87,14 +87,14 @@ const removeStylingWhenNotFocused = e => {
 
 function useSuggestion(e) { //function for suggestion click event listener
 	// TODO
-	let clickedSuggestion = e.target; 
-	if (clickedSuggestion.tagName === 'LI' && clickedSuggestion.className === 'suggestion')
-	document.querySelector(`#fruit`).value = clickedSuggestion.innerText;
+	let clickedSuggestion = e.target;
+	let fruitText = clickedSuggestion.getAttribute('fruit-name') 
+	console.log(clickedSuggestion)
+	if (clickedSuggestion.tagName === 'B' ||clickedSuggestion.tagName === 'LI' || clickedSuggestion.className === 'suggestion')
+	document.querySelector(`input#fruit`).value = fruitText;
 }
 
 input.addEventListener('keyup', searchHandler);
 suggestions.addEventListener('click', useSuggestion);
-
-//do the following in CSS instead
-// suggestions.addEventListener('mouseover', hoverBackgroundChange);
-// suggestions.addEventListener('mouseleave', removeStylingWhenNotFocused);
+suggestions.addEventListener('mouseover', hoverBackgroundChange);
+suggestions.addEventListener('mouseleave', removeStylingWhenNotFocused);
