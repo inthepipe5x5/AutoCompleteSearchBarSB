@@ -27,12 +27,10 @@ input {
   position: fixed;
   top: 45%;
   left: 35%;
-  /* transform: translate((-50%,-50%)); */
   background-color: transparent;
 }
 .search-container input,
 .search-container .suggestions {
-  /* TODO */
   background-color: #f9c045;
   position: relative;
   display: block;
