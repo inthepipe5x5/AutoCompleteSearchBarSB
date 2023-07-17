@@ -45,7 +45,7 @@ function searchHandler(e) {
 }
 
 const removeSuggestedResultsLi = () => {
-	let suggestionsLiList = document.querySelectorAll('li.suggestion')
+	let suggestionsLiList = document.querySelectorAll('li.has-suggestion')
 	for (let suggested of suggestionsLiList){ //clear suggestion li 
 		suggested.remove(suggested)
 	}
@@ -63,7 +63,7 @@ function showSuggestions(results, inputVal) {
 			if (foundIdx + inputLength >= suggested.length) fullText = suggested.slice(0, foundIdx) + boldTextSegment; //bold at end
 
 				let newSuggestionLi = document.createElement('li');
-				newSuggestionLi.classList.add('suggestion');
+				newSuggestionLi.classList.add('has-suggestion');
 				newSuggestionLi.setAttribute('fruit-name', suggested)
 				newSuggestionLi.innerHTML = fullText;
 			
@@ -72,29 +72,28 @@ function showSuggestions(results, inputVal) {
 }
 
 const hoverBackgroundChange= e => {
-	if (e.target.tagName === 'LI' && e.target.className === 'suggestion'){
+	if (e.target.tagName === 'B' || e.target.tagName === 'LI' || e.target.className === 'has-suggestion'){
 		e.target.classList.add('mousefocus');
 	}
 }
 
 const removeStylingWhenNotFocused = e => {
-	if (e.target.tagName === 'LI' && e.target.className === 'suggestion'){
-		for (let suggestionNode of document.querySelectorAll('li.suggestion')){
-			suggestionNode.style.backgroundColor = 'white'
-		}
+	if (e.target.classList.contains('mousefocus')){
+		e.target.classList.remove('mousefocus');
 	}
 }
 
-function useSuggestion(e) { //function for suggestion click event listener
+function useSuggestion(e) { 
 	// TODO
 	let clickedSuggestion = e.target;
 	let fruitText = clickedSuggestion.getAttribute('fruit-name') 
-	console.log(clickedSuggestion)
-	if (clickedSuggestion.tagName === 'B' ||clickedSuggestion.tagName === 'LI' || clickedSuggestion.className === 'suggestion')
+	if (clickedSuggestion.tagName === 'B' ||clickedSuggestion.tagName === 'LI' || clickedSuggestion.className === 'has-suggestion')
 	document.querySelector(`input#fruit`).value = fruitText;
 }
 
 input.addEventListener('keyup', searchHandler);
 suggestions.addEventListener('click', useSuggestion);
+
 suggestions.addEventListener('mouseover', hoverBackgroundChange);
-suggestions.addEventListener('mouseleave', removeStylingWhenNotFocused);
+suggestions.addEventListener('mouseout', removeStylingWhenNotFocused);
+
